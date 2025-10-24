@@ -533,7 +533,7 @@ export const downloadEncryptedContent = async (
 	let firstBlockIsIV = false
 	// if a start byte is specified -- then we need to fetch the previous chunk as that will form the IV
 	if (typeof startByte === 'number') {
-		const chunk = toSmallestChunkSize(startByte)
+		const chunk = toSmallestChunkSize(startByte || 0)
 		if (chunk) {
 			startChunk = chunk - AES_CHUNK_SIZE
 			bytesFetched = chunk
@@ -542,7 +542,7 @@ export const downloadEncryptedContent = async (
 		}
 	}
 
-	const endChunk = typeof endByte === 'number' ? toSmallestChunkSize(endByte) + AES_CHUNK_SIZE : undefined
+	const endChunk = typeof endByte === 'number' ? toSmallestChunkSize(endByte || 0) + AES_CHUNK_SIZE : undefined
 
 	const headersInit = options?.headers ? options.headers : undefined
 	const headers: Record<string, string> = {
