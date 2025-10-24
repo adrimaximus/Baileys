@@ -1,46 +1,56 @@
-# AI Development Rules
+# AI Development Rules for Baileys
 
-This document outlines the technical stack and development rules for this web application. Adhering to these guidelines ensures consistency, maintainability, and high-quality code.
+This document outlines the technical stack and development rules for the Baileys library. Adhering to these guidelines ensures consistency, maintainability, and high-quality code.
 
 ## Tech Stack
 
-This application is built on a modern, component-based architecture. The core technologies are:
+Baileys is a TypeScript library for interacting with the WhatsApp Web API. Its core technologies are:
 
-- **Framework**: The application is built using React, a component-based library for building user interfaces.
-- **Language**: We use TypeScript to add static typing to JavaScript, which helps catch errors early and improves code quality and maintainability.
-- **Routing**: Navigation is handled by React Router, which enables dynamic routing in this single-page application. All routes are defined in `src/App.tsx`.
-- **UI Components**: The primary component library is `shadcn/ui`. It offers a set of reusable, accessible, and stylable components built on top of Radix UI.
-- **Styling**: All styling is done using Tailwind CSS. Its utility-first approach allows for rapid UI development directly in the markup.
-- **Icons**: Icons are provided by the `lucide-react` library, ensuring a consistent and modern look for all iconography.
-- **Backend Services**: For features requiring a backend, such as authentication, database storage, or server-side functions, you will need to integrate a service like Supabase.
+- **Language**: The entire codebase is written in **TypeScript**, ensuring type safety and better maintainability.
+- **Runtime**: The library is designed to run on **Node.js** (version 20.x or higher is required).
+- **Package Manager**: Project dependencies are managed with **Yarn 4.x**.
+- **Core Communication**: Interacts directly with WhatsApp's servers via **WebSockets**, without requiring a browser instance.
+- **Protocol Handling**: Uses **protobufjs** to encode and decode messages based on the definitions in `WAProto/WAProto.proto`.
+- **Cryptography**: End-to-end encryption is handled by a fork of **libsignal-protocol-javascript**, along with custom crypto utilities in `src/Utils/crypto.ts`.
+- **Linting & Formatting**: Code consistency is maintained with **ESLint** and **Prettier**.
+- **Testing**: The project uses **Jest** for unit and end-to-end testing.
+- **CI/CD**: **GitHub Actions** are used for automated building, linting, testing, and publishing new releases to npm.
 
-## Library Usage Rules
+## Development Guidelines & Library Usage
 
-To maintain a clean and consistent codebase, please follow these rules regarding library usage:
+To maintain a clean and consistent codebase, please follow these rules:
 
-### 1. UI Development with `shadcn/ui`
+### 1. Code Style & Quality
 
-- **Primary Choice**: Always prefer using a component from the `shadcn/ui` library before creating a custom one. This ensures visual consistency, accessibility, and adherence to the design system.
-- **Customization**: If a `shadcn/ui` component needs minor adjustments, use Tailwind CSS utility classes to modify its appearance. Avoid direct modification of the library's source files.
-- **New Components**: Only create a new component in `src/components/` if the required functionality or design is not achievable by composing or styling existing `shadcn/ui` components.
+- **Adherence**: Strictly follow the coding style defined by the project's ESLint and Prettier configurations.
+- **Formatting**: Before committing any changes, run `yarn format` and `yarn lint:fix` to ensure your code is clean and consistent.
+- **Typing**: Leverage TypeScript's features to write strongly-typed, self-documenting code. Update or add types in the `src/Types` directory as needed.
 
-### 2. Styling with Tailwind CSS
+### 2. Protocol & Communication
 
-- **Utility-First**: Apply styles using utility classes directly in your JSX. This is the standard for this project.
-- **No Custom CSS Files**: Avoid writing custom CSS files. All styling—layout, colors, spacing, typography—should be managed through Tailwind's utility classes.
+- **Protocol Definitions**: Do not manually edit the generated protobuf files. If the WhatsApp protocol changes, use the scripts in `proto-extract/` to generate a new `WAProto.proto` file.
+- **WebSocket Logic**: All direct WebSocket communication is managed by the core socket files. Use the provided abstractions (`sendNode`, `query`, etc.) for interacting with the socket.
 
-### 3. Navigation with React Router
+### 3. Cryptography
 
-- **Centralized Routes**: All application routes must be defined and managed within the `src/App.tsx` file.
-- **Page Components**: Each route should correspond to a component in the `src/pages/` directory. These components represent the main pages of the application.
-- **Navigation**: Use React Router's provided hooks and components for all internal navigation to ensure proper handling of browser history and routing state.
+- **Use Existing Utilities**: For all encryption and decryption tasks, use the established wrappers around `libsignal` and the helper functions in `src/Signal/` and `src/Utils/crypto.ts`. Avoid introducing new cryptography libraries.
 
-### 4. Icons with `lucide-react`
+### 4. Dependencies
 
-- **Exclusive Use**: For any icon needed in the application, use an icon from the `lucide-react` library. Do not introduce other icon libraries to maintain visual consistency.
-- **Styling Icons**: You can style icons (e.g., size, color) using Tailwind CSS utility classes passed to the icon component.
+- **Package Management**: Use `yarn add` to include new dependencies. Ensure you are using Yarn 4.x as specified in the project configuration.
+- **Third-Party Libraries**: Only add new third-party libraries if they provide essential functionality that cannot be reasonably built from scratch or by using existing dependencies.
 
-### 5. Backend, Database, and Authentication
+### 5. Error Handling & Logging
 
-- **Backend-as-a-Service**: If you need to implement features like user login, data persistence, or handle secret keys, you should use a backend service. For this project, Supabase is the recommended choice.
-- **Integration**: To get started with these features, you first need to add Supabase to your application.
+- **Error Objects**: Use the `@hapi/boom` library to create detailed, HTTP-friendly error objects.
+- **Logging**: Utilize the existing `pino` logger instance for all logging. Provide clear, contextual information in your log messages to aid in debugging.
+
+### 6. Testing
+
+- **Unit Tests**: All new features or significant bug fixes must be accompanied by unit tests. Place test files (`.test.ts`) alongside the source files they are testing.
+- **End-to-End Tests**: For features that involve direct interaction with the WhatsApp API, consider adding end-to-end tests in the `src/__tests__/e2e/` directory.
+
+### 7. Commits and Pull Requests
+
+- **Commit Messages**: Follow the [Conventional Commits](https://www.conventionalcommits.org/) specification (e.g., `feat:`, `fix:`, `chore:`, `docs:`). This helps in automating changelog generation.
+- **Pull Requests**: Ensure your PRs are focused on a single feature or fix. Write a clear and descriptive title and body explaining the changes and the reasoning behind them.
