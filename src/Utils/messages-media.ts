@@ -572,10 +572,11 @@ export const downloadEncryptedContent = async (
 
 	const pushBytes = (bytes: Buffer, push: (bytes: Buffer) => void) => {
 		if (startByte || endByte) {
-			const start = bytesFetched >= startByte! ? undefined : Math.max(startByte! - bytesFetched, 0)
-			const end = bytesFetched + bytes.length < endByte! ? undefined : Math.max(endByte! - bytesFetched, 0)
-
-			push(bytes.slice(start, end))
+			const start = startByte ? Math.max(0, startByte - bytesFetched) : 0
+			const end = endByte ? Math.min(bytes.length, endByte - bytesFetched) : bytes.length
+			if (end > start) {
+				push(bytes.slice(start, end))
+			}
 
 			bytesFetched += bytes.length
 		} else {

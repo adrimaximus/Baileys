@@ -24,7 +24,7 @@ importers:
         specifier: git+https://github.com/whiskeysockets/libsignal-node
         version: '@whiskeysockets/libsignal-node@https://codeload.github.com/whiskeysockets/libsignal-node/tar.gz/e81ecfc32eb74951d789ab37f7e341ab66d5fff1'
       long:
-        specifier: ^5.3.2
+        specifier: ^5.2.3
         version: 5.3.2
       lru-cache:
         specifier: ^11.1.0
@@ -57,6 +57,9 @@ importers:
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
+      '@types/long':
+        specifier: ^5.0.0
+        version: 5.0.0
       '@types/node':
         specifier: ^20.9.0
         version: 20.19.23
@@ -1157,6 +1160,10 @@ packages:
 
   '@types/long@4.0.2':
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
+
+  '@types/long@5.0.0':
+    resolution: {integrity: sha512-eQs9RsucA/LNjnMoJvWG/nXa7Pot/RbBzilF/QRIU/xRl+0ApxrSUFsV5lmf01SvSlqMzJ7Zwxe440wmz2SJGA==}
+    deprecated: This is a stub types definition. long provides its own type definitions, so you do not need this installed.
 
   '@types/markdown-it@14.1.2':
     resolution: {integrity: sha512-promo4eFwuiW+TfGxhi+0x3czqTYJkG8qB17ZUJiVF10Xm7NLVRSLUsfRTU/6h1e24VvRnXCx+hG7li58lkzog==}
@@ -5432,6 +5439,10 @@ snapshots:
   '@types/linkify-it@5.0.0': {}
 
   '@types/long@4.0.2': {}
+
+  '@types/long@5.0.0':
+    dependencies:
+      long: 5.3.2
 
   '@types/markdown-it@14.1.2':
     dependencies:
