@@ -21,6 +21,7 @@
     "engine-requirements.js"
   ],
   "scripts": {
+    "dev": "node -e \"console.log('Baileys agent container is running. Interact with the agent in the chat.'); setInterval(() => {}, 1000 * 60 * 60);\"",
     "build:all": "npm run build && npm run build:docs",
     "build:docs": "typedoc",
     "build": "tsc -P tsconfig.build.json && tsc-esm-fix --tsconfig=tsconfig.build.json --ext=.js",
@@ -103,7 +104,6 @@
       "optional": true
     }
   },
-  "packageManager": "yarn@4.9.2",
   "engines": {
     "node": ">=20.0.0"
   }
