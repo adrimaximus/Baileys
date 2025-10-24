@@ -2,17 +2,16 @@
   "name": "mybot",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@whiskeysockets/baileys": "^7.0.0-rc.6",
-    "express": "^4.19.2",
     "qrcode-terminal": "^0.12.0"
   }
 }
